@@ -1,0 +1,125 @@
+Traffic Flow Prediction — Kaggle Notebook
+
+Title: Traffic Flow Prediction in Urban Areas (LSTM & Baselines)
+Team: 16
+Collaborator: Mekala Babu Abhinav
+git id:
+
+---
+
+Project Description
+
+This Kaggle notebook implements traffic flow prediction for urban roads. 
+It includes data preprocessing, model training (LSTM and baseline regressors), and an inference-only Gradio dashboard that runs inline inside the notebook to preview datasets and get live predictions (mph). 
+
+
+1. street_no — choose from the dataset values
+2. day_of_week — integer (0 = Monday, 6 = Sunday)
+3. time_of_day (hour) — float (0.0–23.5)
+
+Output:
+
+* Predicted speed (mph)
+* Traffic condition classification (Heavy / Moderate / Light)
+* A small visualization (bar or small plot)
+
+## Key Files / Artifacts
+
+* `16_ML.ipynb` — Main Kaggle notebook (notebook cells contain data loading, model code, and Gradio inference UI).
+* `traffic_lstm_model.keras` — Trained LSTM model file (Keras SavedModel / .keras) — required for inference.
+* `scaler_Y.pkl` — Target scaler (joblib pickle), used to inverse-transform predictions back to mph.
+* `/tmp/gradio_trained_model.joblib` and related `/tmp/gradio_X_test.csv` — used by the lightweight Gradio baseline UI if present.
+* Dataset CSVs (e.g. `METR-LA.csv`, other CSVs) — stored under the notebook's files or uploaded via Kaggle dataset panel.
+
+---
+
+Requirements
+
+The notebook was tested in Kaggle's Python environment. If you run locally, install these packages :
+
+```bash
+pip install -r requirements.txt
+# or install individually:
+pip install numpy pandas scikit-learn matplotlib joblib tensorflow gradio pillow
+```
+
+Packages used in the inference UI:
+`tensorflow`, `joblib`, `gradio`, `pandas`, `numpy`, `matplotlib`, `Pillow`.
+
+If you're running the Gradio app on Kaggle, the cell installs `gradio` automatically if it is not installed.
+
+---
+
+Quickstart — Run on Kaggle (Step-by-step)
+
+1. Upload / Add files to the notebook
+
+   * Open the notebook in Kaggle and add the dataset files (click **Add data** or upload files via the file panel). Ensure your cleaned dataframe `tidy_df` is prepared in the notebook (or the notebook contains the preprocessing cells).
+   * Place `traffic_lstm_model.keras` and `scaler_Y.pkl` in the notebook root (or update paths in the cell that loads them).
+
+2. Run preprocessing & model cells 
+
+   * If you want to train from scratch or regenerate `tidy_df`, run the preprocessing and training cells in the notebook in order. Training may be time-consuming — skip if you only need inference and already have model artifacts.
+
+3. Run the Gradio inference cell
+
+   * Locate the cell titled "Traffic Flow Prediction: Gradio Inference Dashboard" (or paste the provided inference-only cell).
+   * Execute the cell. It will:
+
+     * load the model `traffic_lstm_model.keras` and `scaler_Y.pkl`,
+     * assert that `tidy_df` exists in memory, and
+     * launch a Gradio `Blocks` UI inline in the notebook output.
+
+4. Interact with the UI
+
+   * Use the Street Number dropdown, Day slider (0–6), and Hour slider (0–23.5) to get predictions.
+   * The predicted speed (mph), traffic category, and a small visualization appear in the output widgets.
+
+
+---
+
+Quickstart — Run Locally (Optional)
+
+1. Clone or download the notebook and files to your local machine.
+2. Create and activate a Python virtual environment.
+
+```bash
+python -m venv venv
+source venv/bin/activate   # macOS/Linux
+venv\Scripts\activate     # Windows
+pip install -r requirements.txt
+```
+
+3. Start Jupyter or open the notebook in VSCode and run the cells.
+4. The Gradio cell will launch an inline app or a local web server. If run locally, `share=True` will usually succeed and give you a public Gradio URL.
+
+---
+
+## How the Inference Works (High-level)
+
+1. The UI takes three inputs: `street_no`, `day_of_week`, and `hour`.
+2. `prepare_sequence()` extracts the last `SEQ_LEN` readings of `traffic_speed` from `tidy_df` for the chosen street and time window, or fills with the mean if not enough history is available.
+3. The model predicts a scaled value which is inverse-transformed with `scaler_Y` to get speed in mph.
+4. A simple classifier maps mph to traffic condition labels (e.g., Heavy/Moderate/Light).
+5. The app returns a numeric speed, text label, and small matplotlib visualization converted to a PIL image for Gradio.
+
+---
+
+## File Structure (recommended)
+
+```
+project-root/
+├─ 16_ML.ipynb
+├─ traffic_lstm_model.keras
+├─ scaler_Y.pkl
+├─ data/
+│  ├─ METR-LA.csv
+├─ requirements.txt
+└─ README.md
+```
+
+---
+
+
+
+
