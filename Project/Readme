@@ -3,7 +3,7 @@ Traffic Flow Prediction — Kaggle Notebook
 Title: Traffic Flow Prediction in Urban Areas (LSTM & Baselines)
 Team: 16
 Collaborator: Mekala Babu Abhinav
-git id:
+git id: AbhinavMekala
 
 ---
 
@@ -23,7 +23,7 @@ Output:
 * Traffic condition classification (Heavy / Moderate / Light)
 * A small visualization (bar or small plot)
 
-## Key Files / Artifacts
+Key Files / Artifacts
 
 * `16_ML.ipynb` — Main Kaggle notebook (notebook cells contain data loading, model code, and Gradio inference UI).
 * `traffic_lstm_model.keras` — Trained LSTM model file (Keras SavedModel / .keras) — required for inference.
@@ -54,7 +54,7 @@ Quickstart — Run on Kaggle (Step-by-step)
 
 1. Upload / Add files to the notebook
 
-   * Open the notebook in Kaggle and add the dataset files (click **Add data** or upload files via the file panel). Ensure your cleaned dataframe `tidy_df` is prepared in the notebook (or the notebook contains the preprocessing cells).
+   * Open the notebook in Kaggle and add the dataset files (click Add data or upload files via the file panel). Ensure your cleaned dataframe `tidy_df` is prepared in the notebook (or the notebook contains the preprocessing cells).
    * Place `traffic_lstm_model.keras` and `scaler_Y.pkl` in the notebook root (or update paths in the cell that loads them).
 
 2. Run preprocessing & model cells 
@@ -95,7 +95,7 @@ pip install -r requirements.txt
 
 ---
 
-## How the Inference Works (High-level)
+How the Inference Works (High-level)
 
 1. The UI takes three inputs: `street_no`, `day_of_week`, and `hour`.
 2. `prepare_sequence()` extracts the last `SEQ_LEN` readings of `traffic_speed` from `tidy_df` for the chosen street and time window, or fills with the mean if not enough history is available.
@@ -105,7 +105,7 @@ pip install -r requirements.txt
 
 ---
 
-## File Structure (recommended)
+File Structure (recommended)
 
 ```
 project-root/
